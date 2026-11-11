@@ -4377,3 +4377,76 @@ h1, h2, h3, h4 {
     padding: 1px 8px;
 }
 @media (prefers-reduced-motion: reduce) { .suggest-card { transition: none; } }
+
+
+/* ==========================================
+   SIMPLE FOOTER: dark rose band like the trust line, compact
+   ========================================== */
+.footer {
+    background-color: var(--color-cta);
+    color: var(--color-white);
+    border: 0;
+    border-top: var(--edge);
+    border-radius: 0;
+    margin-top: 3rem;
+    padding: 1.6rem 2rem 1.5rem;
+}
+.footer .footer-simple {
+    max-width: 980px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    text-align: left;
+}
+.footer .footer-brand-name {
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin: 0;
+}
+.footer .footer-line {
+    color: var(--color-white);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+}
+.footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.3rem;
+    margin: 0.5rem 0 0.2rem;
+}
+.footer .footer-links a {
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.footer .footer-links a:hover { color: var(--color-accent); }
+.footer .footer-copy {
+    margin-top: 0.4rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.45);
+    width: 100%;
+    color: var(--color-primary-light);
+    font-weight: 700;
+}
+@media (max-width: 600px) {
+    .footer { padding: 1.4rem 1.2rem 1.3rem; }
+}
+
+/* Floating buttons step aside while the footer is on screen, so no extra footer padding is needed */
+.floating-contact-fab,
+.chat-launcher {
+    transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+body.footer-in-view .floating-contact-fab,
+body.footer-in-view .chat-launcher {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+}
