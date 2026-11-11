@@ -334,6 +334,87 @@ function addToCartById(productId, qty = 1, customName = '') {
 
 window.addToCartById = addToCartById; // Expose globally
 
+// ---- Basket perks: free-shipping and free-gift progress bars ----
+const FREE_SHIPPING_MIN = 700;   // ₹ items total for free delivery (worker: FREE_SHIPPING_MIN_INR)
+const GIFT_ITEMS_NEEDED = 3;     // pieces in the basket to unlock the free gift
+
+function perkBar(icon, title, done, ratio, text) {
+    const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+    return `
+        <div class="perk${done ? ' perk-done' : ''}">
+            <div class="perk-row"><span>${icon} ${title}</span><span>${text}</span></div>
+            <div class="perk-track" role="progressbar" aria-label="${title}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
+                <div class="perk-fill" style="width:${pct}%"></div>
+            </div>
+        </div>`;
+}
+
+function renderCartPerks(subtotal, count) {
+    const el = document.getElementById('cartPerks');
+    if (!el) return;
+    if (count === 0) { el.innerHTML = ''; return; }
+    const shipLeft = FREE_SHIPPING_MIN - subtotal;
+    const giftLeft = GIFT_ITEMS_NEEDED - count;
+    el.innerHTML =
+        perkBar('🚚', shipLeft > 0 ? `₹${shipLeft} to free shipping` : 'Free shipping unlocked! 🎉',
+            shipLeft <= 0, subtotal / FREE_SHIPPING_MIN, `₹${Math.min(subtotal, FREE_SHIPPING_MIN)} of ₹${FREE_SHIPPING_MIN}`) +
+        perkBar('🎁', giftLeft > 0 ? `Add ${giftLeft} more ${giftLeft === 1 ? 'piece' : 'pieces'} for a free gift` : 'Free gift unlocked! 🎉',
+            giftLeft <= 0, count / GIFT_ITEMS_NEEDED, `${Math.min(count, GIFT_ITEMS_NEEDED)} of ${GIFT_ITEMS_NEEDED}`);
+}
+
+// ---- Basket suggestions: small add-more cards that fit the amount still needed ----
+function ensureCartSuggestBox() {
+    let box = document.getElementById('cartSuggest');
+    if (box) return box;
+    const items = document.getElementById('cartItemsContainer');
+    if (!items) return null;
+    box = document.createElement('div');
+    box.id = 'cartSuggest';
+    box.className = 'cart-suggest';
+    box.hidden = true;
+    items.insertAdjacentElement('afterend', box);
+    box.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-suggest-id]');
+        if (btn) addToCartById(Number(btn.dataset.suggestId));
+    });
+    return box;
+}
+
+function renderCartSuggestions(subtotal, count) {
+    const box = ensureCartSuggestBox();
+    if (!box) return;
+    const shipLeft = FREE_SHIPPING_MIN - subtotal;
+    const giftLeft = GIFT_ITEMS_NEEDED - count;
+    if (count === 0 || (shipLeft <= 0 && giftLeft <= 0) || !allProducts.length) { box.hidden = true; box.innerHTML = ''; return; }
+
+    const inBasket = new Set(cart.map(i => i.product.id));
+    const pool = allProducts.filter(p => p.available !== false && !p.customizable && !inBasket.has(p.id));
+    let title, picks;
+    if (shipLeft > 0) {
+        // Fill the gap: anything up to the amount still needed, priciest first so one add gets closest.
+        title = `Add ₹${shipLeft} more for free shipping`;
+        picks = pool.filter(p => Number(p.price) <= shipLeft).sort((a, b) => Number(b.price) - Number(a.price));
+        if (picks.length === 0) picks = pool.slice().sort((a, b) => Number(a.price) - Number(b.price)); // gap is tiny: cheapest pieces
+    } else {
+        title = `Add ${giftLeft} more ${giftLeft === 1 ? 'piece' : 'pieces'} for a free gift`;
+        picks = pool.slice().sort((a, b) => Number(a.price) - Number(b.price));
+    }
+    picks = picks.slice(0, 8);
+    if (picks.length === 0) { box.hidden = true; box.innerHTML = ''; return; }
+
+    box.innerHTML = `
+        <h4 class="cart-suggest-title">${title}</h4>
+        <div class="cart-suggest-row">
+            ${picks.map(p => `
+                <button type="button" class="suggest-card" data-suggest-id="${escapeHtml(p.id)}" aria-label="Add ${escapeHtml(p.name)} for ₹${escapeHtml(p.price)}">
+                    <img src="${escapeHtml(p.image)}" alt="" loading="lazy" decoding="async" width="72" height="72" data-fallback="product" data-name="${escapeHtml(p.name)}" data-category="${escapeHtml(p.category)}">
+                    <span class="suggest-name">${escapeHtml(p.name)}</span>
+                    <span class="suggest-price">+ ₹${escapeHtml(p.price)}</span>
+                </button>`).join('')}
+        </div>`;
+    box.hidden = false;
+}
+
 function updateCartUI() {
     const cartCountBadge = document.getElementById('cartBadgeCount');
     const floatCartBadge = document.getElementById('floatingCartBadgeCount');
@@ -356,6 +437,8 @@ function updateCartUI() {
             </div>
         `;
         cartTotalDisplay.textContent = '₹0';
+        renderCartPerks(0, 0);
+        renderCartSuggestions(0, 0);
         return;
     }
     
@@ -418,6 +501,8 @@ function updateCartUI() {
     });
     
     cartTotalDisplay.textContent = `₹${subtotal}`;
+    renderCartPerks(subtotal, totalItems);
+    renderCartSuggestions(subtotal, totalItems);
 }
 
 function changeCartQty(index, change) {
@@ -942,7 +1027,7 @@ function openDeliveryDetails(target = 'paypal') {
     if (cart.length === 0) return;
     deliveryTarget = target;
     document.getElementById('deliveryPayBtn').textContent =
-        target === 'instagram' ? 'Send Order on Instagram 💬' : 'Pay with PayPal 🌸';
+        target === 'instagram' ? 'Send Order Request 💬' : 'Pay with PayPal 🌸';
     const form = document.getElementById('deliveryForm');
     // Prefill from the last order on this device.
     try {
@@ -1090,9 +1175,14 @@ async function refreshDeliveryQuote() {
         const data = await res.json();
         if (seq !== quoteSeq) return; // a newer PIN code was typed meanwhile
         if (!res.ok) throw new Error(data.error || 'Could not get a delivery charge');
+        // Instagram orders are priced by hand, so the free-shipping rule also applies here
+        // even if the API worker has not been redeployed yet. (PayPal is always priced by the worker.)
+        if (deliveryTarget === 'instagram' && itemsTotal >= FREE_SHIPPING_MIN && !data.free) {
+            Object.assign(data, { delivery: 0, free: true, total: itemsTotal });
+        }
         deliveryQuote = data;
-        label.textContent = `Delivery (${data.courier}${data.days ? `, ~${data.days} days` : ''})`;
-        value.textContent = `₹${data.delivery}`;
+        label.textContent = 'Delivery';
+        value.textContent = data.free ? 'FREE 🎉' : `₹${data.delivery}`;
         total.textContent = `₹${data.total}`;
         setPayEnabled(true);
     } catch (err) {
@@ -1171,7 +1261,7 @@ const INSTAGRAM_ORDER_MODES = {
         policies: [
             "• I'll pay once you confirm the order.",
             "• Custom curing takes 4 to 6 days before shipping.",
-            "• Delivery cost is paid by the buyer (self pickup in Ahmedabad is free).",
+            "• Delivery is free over ₹700, otherwise paid by the buyer (self pickup in Ahmedabad is free).",
             "• Customized items - no returns/refunds/exchanges."
         ],
         closing: "Please confirm availability and share payment details! ✨",
@@ -1214,8 +1304,11 @@ function sendOrderViaInstagram(mode, customer, quote) {
 
     const subtotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
     message += `Basket Subtotal: ₹${subtotal}\n`;
+    if (cart.reduce((n, i) => n + i.quantity, 0) >= GIFT_ITEMS_NEEDED) {
+        message += `🎁 Free gift unlocked (${GIFT_ITEMS_NEEDED}+ pieces)\n`;
+    }
     if (quote) {
-        message += `Delivery Charge: ₹${quote.delivery} (${quote.courier}${quote.days ? `, ~${quote.days} days` : ''})\n`;
+        message += `Delivery Charge: ${quote.free ? 'FREE (order over ₹' + FREE_SHIPPING_MIN + ')' : '₹' + quote.delivery} (${quote.courier})\n`;
         message += `Total: ₹${subtotal + quote.delivery}\n`;
     }
     message += "--------------------------------------\n";
@@ -1310,9 +1403,6 @@ function initSearchAndProfile() {
         });
     });
     
-    document.getElementById('profileBtn').onclick = () => {
-        showToast('Guest checkout active - account system offline! 🌸');
-    };
 }
 
 // ==========================================
@@ -1459,7 +1549,7 @@ function initUIHandlers() {
     
     document.getElementById('checkoutBtn').onclick = handleCheckout;
     if (window.HETAAS_API) {
-        document.getElementById('checkoutBtn').textContent = 'Continue to Checkout 🌸';
+        document.getElementById('checkoutBtn').textContent = 'Place Order Request 🌸';
         initOrderOptions();
         initDeliveryForm();
         if (window.HETAAS_MODE === 'demo') showDemoBanner();
@@ -1610,10 +1700,16 @@ function renderTrustBar() {
     if (!bar || !wrap) return;
     const tb = content.trustBar;
     if (!tb || tb.enabled === false || !Array.isArray(tb.items) || tb.items.length === 0) { bar.hidden = true; return; }
-    wrap.innerHTML = tb.items.map((item, i) => `
-        ${i > 0 ? '<div class="trust-divider">•</div>' : ''}
+    // One run of the items; it is repeated so the strip can scroll right to left without a gap.
+    const run = tb.items.map(item => `
         <div class="trust-item"><span>${escapeHtml(item.icon || '')}</span> ${escapeHtml(item.text || '')}</div>
+        <div class="trust-divider" aria-hidden="true">•</div>
     `).join('');
+    wrap.innerHTML = `
+        <div class="trust-track">
+            <div class="trust-run">${run}</div>
+            <div class="trust-run" aria-hidden="true">${run}</div>
+        </div>`;
     bar.hidden = false;
 }
 
@@ -1627,7 +1723,6 @@ function renderHowToOrder() {
     grid.innerHTML = h.steps.map((s, i) => `
         <div class="hto-step">
             <div class="hto-num">${i + 1}</div>
-            <div class="hto-emoji">${escapeHtml(s.icon || '')}</div>
             <h3>${escapeHtml(s.title || '')}</h3>
             <p>${escapeHtml(s.text || '')}</p>
         </div>

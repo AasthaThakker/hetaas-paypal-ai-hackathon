@@ -4,8 +4,8 @@
 
 ## Agent access
 
-- Product catalogue (JSON): https://hetaas-atelier.aasthathakker.com/products.json
-- Shop info and FAQs (JSON): https://hetaas-atelier.aasthathakker.com/content.json
+- Product catalogue (JSON): https://hetaas-demo.pages.dev/products.json
+- Shop info and FAQs (JSON): https://hetaas-demo.pages.dev/content.json
 - Agent endpoint (MCP-style JSON-RPC over HTTP POST): https://hetaas-api.automated-aesthetix.workers.dev/mcp
   - tools: search_products, get_product, create_checkout (returns a PayPal approveUrl for the buyer)
 

@@ -32,19 +32,44 @@
   "trustBar": {
     "enabled": true,
     "items": [
-      { "icon": "🔒", "text": "Pre-Paid & Secure Orders" },
-      { "icon": "🚚", "text": "Pan-India Shipping" },
-      { "icon": "⭐", "text": "Loved by Happy Patrons" },
-      { "icon": "📍", "text": "Handcrafted in Ahmedabad" }
+      {
+        "icon": "🔒",
+        "text": "Pre-Paid & Secure Orders"
+      },
+      {
+        "icon": "🚚",
+        "text": "Pan-India Shipping"
+      },
+      {
+        "icon": "🎁",
+        "text": "Free Shipping over ₹700"
+      },
+      {
+        "icon": "⭐",
+        "text": "Loved by Happy Patrons"
+      },
+      {
+        "icon": "📍",
+        "text": "Handcrafted in Ahmedabad"
+      }
     ]
   },
   "howToOrder": {
     "enabled": true,
     "heading": "Order in 3 Easy Steps",
     "steps": [
-      { "icon": "🛒", "title": "Pick Your Pieces", "text": "Browse the collection or design a custom treasure, then add to your Resin Basket." },
-      { "icon": "📋", "title": "Review Your Basket", "text": "Open the basket, adjust quantities, and add any special notes for your order." },
-      { "icon": "🌸", "title": "Send Your Order", "text": "Choose delivery (we show the charge for your PIN code) or free self pickup in Ahmedabad, and send your order." }
+      {
+        "title": "Pick Your Pieces",
+        "text": "Browse the collection or design a custom treasure, then add to your Resin Basket."
+      },
+      {
+        "title": "Review Your Basket",
+        "text": "Open the basket, adjust quantities, and add any special notes for your order."
+      },
+      {
+        "title": "Send Your Order",
+        "text": "Choose delivery (we show the charge for your PIN code) or free self pickup in Ahmedabad, and send your order."
+      }
     ]
   },
   "about": {
@@ -53,16 +78,36 @@
     "subtitle": "Poured & polished with love in Ahmedabad, Gujarat since 2022",
     "story": "Born out of a deep love for botanical art, <strong>HetAas Atelier</strong> transforms organic pressed flowers, foil accents, and high-clarity resin into timeless keepsakes. From personalized golden name keychains to sacred pooja thalis and home decor, every single creation is individually poured, cured over 4 to 6 days, and polished by hand in our studio.",
     "features": [
-      { "icon": "🏡", "title": "Handcrafted in Ahmedabad", "text": "Locally made with individual attention to detail." },
-      { "icon": "🌸", "title": "Real Botanicals", "text": "100% genuine dried flowers preserved in gloss." },
-      { "icon": "✨", "title": "Custom Inscriptions", "text": "Golden name stickers & custom color palettes." }
+      {
+        "icon": "🏡",
+        "title": "Handcrafted in Ahmedabad",
+        "text": "Locally made with individual attention to detail."
+      },
+      {
+        "icon": "🌸",
+        "title": "Real Botanicals",
+        "text": "100% genuine dried flowers preserved in gloss."
+      },
+      {
+        "icon": "✨",
+        "title": "Custom Inscriptions",
+        "text": "Golden name stickers & custom color palettes."
+      }
     ]
   },
-  "categories": ["Earrings", "Coasters", "Bookmarks", "Keychains", "Decor", "Spiritual", "Thali"],
+  "categories": [
+    "Earrings",
+    "Coasters",
+    "Bookmarks",
+    "Keychains",
+    "Decor",
+    "Spiritual",
+    "Thali"
+  ],
   "faqs": [
     {
       "q": "How do I place an order?",
-      "a": "Add your items (shop pieces or custom creations) to your <strong>Resin Basket</strong> and tap checkout. Then choose <strong>Get it delivered</strong> (we show the delivery charge for your PIN code) or <strong>Self pickup in Ahmedabad</strong> (free, we fix a pickup time on Instagram). Your order is sent to us on Instagram, and we share payment details once we confirm it."
+      "a": "Add your items (shop pieces or custom creations) to your <strong>Resin Basket</strong> and tap checkout. Then choose <strong>Get it delivered</strong> (we show the delivery charge for your PIN code) or <strong>Self pickup in Ahmedabad</strong> (free, we fix a pickup time on Instagram). Your order is sent to us on Instagram, and we share payment details once we confirm it. On this demo site you can also <strong>pay instantly with PayPal</strong> (sandbox: no real money is charged)."
     },
     {
       "q": "What are the payment and refund rules?",
@@ -71,10 +116,6 @@
     {
       "q": "How long does it take to make customized items?",
       "a": "Resin curing is a slow, artistic process. It takes around <strong>4 to 6 days</strong> to design, pour, bubble-pop, and fully cure a customized order before it can be collected or dispatched."
-    },
-    {
-      "q": "What is the shipping policy?",
-      "a": "We do not offer free shipping. Customers in Ahmedabad can arrange a self-pickup. If you want us to ship anywhere else across India, the <strong>delivery costs must be borne entirely by the buyer</strong>."
     }
   ],
   "reviews": [
@@ -113,32 +154,132 @@
   },
   "customizer": {
     "bases": [
-      { "id": "bookmark", "name": "Bookmark", "price": 100, "emoji": "🔖", "category": "Bookmarks" },
-      { "id": "coaster", "name": "Coaster", "price": 250, "emoji": "🍵", "category": "Coasters" },
-      { "id": "keychain", "name": "Butterfly Keychain", "price": 180, "emoji": "🦋", "category": "Keychains" },
-      { "id": "earrings", "name": "Earrings", "price": 120, "emoji": "💎", "category": "Earrings" },
-      { "id": "thali", "name": "Pooja Thali", "price": 1800, "emoji": "🪔", "category": "Thali" },
-      { "id": "decor-plate", "name": "Decor Plate (8-inch)", "price": 800, "emoji": "🏺", "category": "Decor" }
+      {
+        "id": "bookmark",
+        "name": "Bookmark",
+        "price": 100,
+        "emoji": "🔖",
+        "category": "Bookmarks"
+      },
+      {
+        "id": "coaster",
+        "name": "Coaster",
+        "price": 250,
+        "emoji": "🍵",
+        "category": "Coasters"
+      },
+      {
+        "id": "keychain",
+        "name": "Butterfly Keychain",
+        "price": 180,
+        "emoji": "🦋",
+        "category": "Keychains"
+      },
+      {
+        "id": "earrings",
+        "name": "Earrings",
+        "price": 120,
+        "emoji": "💎",
+        "category": "Earrings"
+      },
+      {
+        "id": "thali",
+        "name": "Pooja Thali",
+        "price": 1800,
+        "emoji": "🪔",
+        "category": "Thali"
+      },
+      {
+        "id": "decor-plate",
+        "name": "Decor Plate (8-inch)",
+        "price": 800,
+        "emoji": "🏺",
+        "category": "Decor"
+      }
     ],
     "colors": [
-      { "id": "blue", "name": "Blue Tint", "emoji": "🔹" },
-      { "id": "white", "name": "White Swirl", "emoji": "🐚" },
-      { "id": "transparent", "name": "Transparent Clear", "emoji": "💧" },
-      { "id": "pink", "name": "Pink Tint", "emoji": "🌸" },
-      { "id": "green", "name": "Green Tint", "emoji": "🍃" },
-      { "id": "yellow", "name": "Yellow Tint", "emoji": "💛" },
-      { "id": "copper", "name": "Copper Sheen", "emoji": "🪵" },
-      { "id": "metal", "name": "Metal Shimmer", "emoji": "🪙" }
+      {
+        "id": "blue",
+        "name": "Blue Tint",
+        "emoji": "🔹"
+      },
+      {
+        "id": "white",
+        "name": "White Swirl",
+        "emoji": "🐚"
+      },
+      {
+        "id": "transparent",
+        "name": "Transparent Clear",
+        "emoji": "💧"
+      },
+      {
+        "id": "pink",
+        "name": "Pink Tint",
+        "emoji": "🌸"
+      },
+      {
+        "id": "green",
+        "name": "Green Tint",
+        "emoji": "🍃"
+      },
+      {
+        "id": "yellow",
+        "name": "Yellow Tint",
+        "emoji": "💛"
+      },
+      {
+        "id": "copper",
+        "name": "Copper Sheen",
+        "emoji": "🪵"
+      },
+      {
+        "id": "metal",
+        "name": "Metal Shimmer",
+        "emoji": "🪙"
+      }
     ],
     "inclusions": [
-      { "id": "gold-foil", "name": "Gold Foil", "emoji": "✨" },
-      { "id": "silver-foil", "name": "Silver Foil", "emoji": "❄" },
-      { "id": "pink-foil", "name": "Pink Foil", "emoji": "💖" },
-      { "id": "rose", "name": "Dried Rose", "emoji": "🌹" },
-      { "id": "marigold", "name": "Dried Marigold", "emoji": "🌼" },
-      { "id": "sticker", "name": "Aesthetic Sticker", "emoji": "🏷️" },
-      { "id": "pressed-flower", "name": "Pressed Flower", "emoji": "🥀" },
-      { "id": "none", "name": "None", "emoji": "🚫" }
+      {
+        "id": "gold-foil",
+        "name": "Gold Foil",
+        "emoji": "✨"
+      },
+      {
+        "id": "silver-foil",
+        "name": "Silver Foil",
+        "emoji": "❄"
+      },
+      {
+        "id": "pink-foil",
+        "name": "Pink Foil",
+        "emoji": "💖"
+      },
+      {
+        "id": "rose",
+        "name": "Dried Rose",
+        "emoji": "🌹"
+      },
+      {
+        "id": "marigold",
+        "name": "Dried Marigold",
+        "emoji": "🌼"
+      },
+      {
+        "id": "sticker",
+        "name": "Aesthetic Sticker",
+        "emoji": "🏷️"
+      },
+      {
+        "id": "pressed-flower",
+        "name": "Pressed Flower",
+        "emoji": "🥀"
+      },
+      {
+        "id": "none",
+        "name": "None",
+        "emoji": "🚫"
+      }
     ]
   },
   "analytics": {
