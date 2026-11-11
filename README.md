@@ -3,6 +3,7 @@
 A working commerce site for a handmade resin-art business in Ahmedabad, India, built for the PayPal Developer Platform hackathon (sandbox). Shoppers chat with an AI concierge, build a basket, get a live delivery charge from their PIN code, and pay with PayPal. AI agents can run the same flow through an MCP-style endpoint.
 
 - 🧪 **Live demo (PayPal sandbox, all features):** https://hetaas-demo.pages.dev
+- 🎬 **Demo video (under 3 minutes):** `<add YouTube link>`
 - 🛍️ Live shop without PayPal (same code, separate mode): https://hetaas-atelier.aasthathakker.com/
 
 To pay on the demo, use a PayPal **sandbox Personal** test account. No real money moves.
@@ -46,13 +47,13 @@ Browser (static site: HTML/CSS/JS) ──► Cloudflare Worker API (worker/) ─
 
 ## Run it locally
 
-You need Node.js 18 or newer. PayPal sandbox keys are needed for checkout. A Gemini or Groq key is needed for the chat. Resend and Shiprocket are optional.
+You need Node.js 18 or newer. PayPal sandbox keys are needed for checkout. A Gemini or Groq key is needed for the chat. Shiprocket keys are needed for the delivery quote at checkout. Resend is optional (owner emails only).
 
 ### 1. Static site
 
 ```bash
 # from the repository root
-npx serve .            # or: python -m http.server 8080
+npx serve . -l 8080    # or: python -m http.server 8080
 ```
 
 Open http://localhost:8080. Localhost runs in `demo` mode and calls the local Worker at `http://127.0.0.1:8787`.
@@ -78,7 +79,7 @@ npx wrangler dev
 | `GEMINI_API_KEY` | Google AI Studio (free tier) |
 | `GROQ_API_KEY` | console.groq.com (free tier, optional fallback) |
 | `RESEND_API_KEY`, `OWNER_EMAIL` | resend.com (optional, for owner receipt emails) |
-| `SHIPROCKET_EMAIL`, `SHIPROCKET_PASSWORD` | Shiprocket API user (optional, for live delivery charges) |
+| `SHIPROCKET_EMAIL`, `SHIPROCKET_PASSWORD` | Shiprocket API user (needed for the live delivery quote at checkout) |
 
 `PAYPAL_ENV` is `sandbox` in `worker/wrangler.toml`. Never commit `.dev.vars`; it is git-ignored.
 
