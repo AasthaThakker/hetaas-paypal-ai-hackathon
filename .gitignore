@@ -1,0 +1,35 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+
+# Environment variables
+.env*.local
+
+# Common ignores
+node_modules
+.next/
+.DS_Store
+
+# Admin console — local-only management tool, intentionally kept out of the public repo.
+# Run it locally: `python -m http.server` then open /admin/. (Remove this line to version it.)
+admin/
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Worker secrets and local dev
+worker/.dev.vars
+worker/.wrangler/
+worker/node_modules/
